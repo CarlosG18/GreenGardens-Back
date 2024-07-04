@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Empresa de paisagismo">
 
-    <link rel="preload" href="img/geral/logo.svg" as="image">
-    <link rel="preload" href="img/slider/slider-img1.jpeg" as="image">
+    <link rel="preload" href="{% static 'img/geral/logo.svg' %}" as="image">
+    <link rel="preload" href="{% static 'img/slider/slider-img1.jpeg' %}" as="image">
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <title>Green Gardens</title>
@@ -20,7 +22,7 @@
         <nav class="nav_bar container">
 
             <a href="#slider">
-                <img src="img/geral/logo.svg" alt="Logo Green Gardens" class="navbar_logo">
+                <img src="{% static 'img/geral/logo.svg' %}" alt="Logo Green Gardens" class="navbar_logo">
             </a>
 
             <ul class="nav_links_desktop">
@@ -32,19 +34,19 @@
             <ul class="nav_links_mobile">
                 <li>
                     <a href="#servicos_mobile">
-                        <img src="img/navbar/servicos-icon.svg" alt="Icone serviços">
+                        <img src="{% static 'img/navbar/servicos-icon.svg' %}" alt="Icone serviços">
                     </a>
                 </li>
 
                 <li>
                     <a href="#valores">
-                        <img src="img/navbar/valores-icon.svg" alt="Icone valores">
+                        <img src="{% static 'img/navbar/valores-icon.svg' %}" alt="Icone valores">
                     </a>
                 </li>
 
                 <li>
                     <a href="#contato">
-                        <img src="img/navbar/contato-icon.svg" alt="Icone contato">
+                        <img src="{% static 'img/navbar/contato-icon.svg' %}" alt="Icone contato">
                     </a>
                 </li>
             </ul>
@@ -61,14 +63,14 @@
                   <!-- Slides -->
                     <div class="swiper-slide">
                         <div class="overlay"></div>
-                        <img src="img/slider/slider-img1.webp" alt="Quintal de plantas">
+                        <img src="{% static 'img/slider/slider-img1.webp' %}" alt="Quintal de plantas">
                     </div>
                     <div class="swiper-slide">
-                        <img src="img/slider/slider-img2.webp" alt="Parque" loading="lazy">
+                        <img src="{% static 'img/slider/slider-img2.webp' %}" alt="Parque" loading="lazy">
                         <div class="overlay"></div>
                     </div>
                     <div class="swiper-slide">
-                        <img src="img/slider/slider-img3.webp" alt="Restaurante" loading="lazy">
+                        <img src="{% static 'img/slider/slider-img3.webp' %}" alt="Restaurante" loading="lazy">
                         <div class="overlay"></div>
                     </div>
                     </div>
@@ -86,12 +88,12 @@
         <section id="home" data-anima="scroll">
             <div class="side-a-side_grid">
                 <div class="left_side">
-                    <img src="img/home/logo-Text.svg" alt="Logo e Texto Green Gardens">
+                    <img src="{% static 'img/home/logo-Text.svg' %}" alt="Logo e Texto Green Gardens">
                     <div class="overlay"></div>
                 </div>
                 <div class="right_side">
                     <div class="right_side-content">
-                        <img src="img/geral/logo.svg" alt="Logo Green Gardens">
+                        <img src="{% static 'img/geral/logo.svg' %}" alt="Logo Green Gardens">
                         <p>
                             Desde 2014 nossa missão é transformar espaços urbanos e 
                             residenciais em ambientes verdes e sustentáveis, promovendo 
@@ -99,28 +101,28 @@
                         </p>
                         <a href="#contato" class="home_contact_button">Entrar em Contato</a>
                     </div>
-                    <img src="img/geral/deco-verdeClaro.svg" alt="Decoração em círculo" class="deco-home">
+                    <img src="{% static 'img/geral/deco-verdeClaro.svg' %}" alt="Decoração em círculo" class="deco-home">
                 </div>
             </div>
         </section> 
         
         <!--Seção serviços-->
         <section id="servicos" data-anima="scroll">
-            <img src="img/geral/deco-cinza.svg" alt="Decoração cinza" class="deco_home-top">
+            <img src="{% static 'img/geral/deco-cinza.svg' %}" alt="Decoração cinza" class="deco_home-top">
             <div class="servicos container">
                 <h1 class="section_title">Nossos serviços</h1>
                 <div class="servicos_grid container">
                     <div class="servicos_card">
-                        <img src="img/servicos/paisagismo-urbano.webp" alt="Paisagismo urbano">
+                        <img src="{% static 'img/servicos/paisagismo-urbano.webp' %}" alt="Paisagismo urbano">
                         <p>Paisagismo urbano</p>
                     </div>
                     <div class="servicos_card">
-                        <img src="img/servicos/paisagismo-interno.webp" alt="Paisagismo de áreas internas">
+                        <img src="{% static 'img/servicos/paisagismo-interno.webp' %}" alt="Paisagismo de áreas internas">
                         <p>Paisagismo de áreas internas</p>
                     </div>
                 </div>
             </div>
-            <img src="img/geral/deco-cinza.svg" alt="Decoração cinza" class="deco_home-bottom">
+            <img src="{% static 'img/geral/deco-cinza.svg' %}" alt="Decoração cinza" class="deco_home-bottom">
         </section>
 
         <!--Seção serviços mobile-->
@@ -132,14 +134,14 @@
                  
                   <div class="swiper-slide">
                     <div class="servicos_mobile_card">
-                        <img src="img/servicos/paisagismo-urbano.webp" alt="Paisagismo Urbano">
+                        <img src="{% static 'img/servicos/paisagismo-urbano.webp' %}" alt="Paisagismo Urbano">
                         <p class="container">Paisagismo Urbano</p>
                     </div>
                   </div>
 
                   <div class="swiper-slide">
                     <div class="servicos_mobile_card">
-                        <img src="img/servicos/paisagismo-interno.webp" alt="Paisagismo Interno" loading="lazy">
+                        <img src="{% static 'img/servicos/paisagismo-interno.webp' %}" alt="Paisagismo Interno" loading="lazy">
                         <p class="container">Paisagismo Interno</p>
                     </div>
                   </div>
@@ -149,10 +151,10 @@
              
 
                 <div class="swiper-button-next-servicos">
-                    <img src="img/servicos/next-arrow.svg" alt="Seta de próximo">
+                    <img src="{% static 'img/servicos/next-arrow.svg' %}" alt="Seta de próximo">
                 </div>
                 <div class="swiper-button-prev-servicos">
-                    <img src="img/servicos/prev-arrow.svg" alt="Seta de anterior">
+                    <img src="{% static 'img/servicos/prev-arrow.svg' %}" alt="Seta de anterior">
                 </div>
 
              
@@ -176,9 +178,9 @@
                     </p>
                     <button data-buttonModal>Download gratuito</button>
                 </div>
-                <img src="img/ebooks/ebook.webp" alt="E-book de cuidados e paisagismo">
+                <img src="{% static 'img/ebooks/ebook.webp' %}" alt="E-book de cuidados e paisagismo">
             </div>
-            <img src="img/geral/deco-verdeClaro.svg" alt="Decoraçao serviços" class="deco_servicos">
+            <img src="{% static 'img/geral/deco-verdeClaro.svg' %}" alt="Decoraçao serviços" class="deco_servicos">
         </section>
 
         <!--Seção ebooks mobile-->
@@ -200,20 +202,20 @@
 
                 <button class="buttonOpenModal_mobile" data-buttonModal>Download gratuito</button>
 
-                <img src="img/ebooks/ebook.webp" alt="Guia de cuidados" class="ebooks_mobile_img">
+                <img src="{% static 'img/ebooks/ebook.webp' %}" alt="Guia de cuidados" class="ebooks_mobile_img">
 
             </div>
-            <img src="img/geral/deco-verdeClaro.svg" alt="Decoraçao cinza" class="deco_ebooks_mobile">
+            <img src="{% static 'img/geral/deco-verdeClaro.svg' %}" alt="Decoraçao cinza" class="deco_ebooks_mobile">
         </section>
         
         <!--Seção valores-->
         <section id="valores" class="container" data-anima="scroll">
             <h1 class="section_title">Valores</h1>
-            <img src="img/geral/deco-cinza.svg" alt="Decoração cinza" class="valores_deco">
+            <img src="{% static 'img/geral/deco-cinza.svg' %}" alt="Decoração cinza" class="valores_deco">
             <div class="carrossel_valores">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
-                            <img src="img/valores/valores_card-img1.webp" alt="Plantação">
+                            <img src="{% static 'img/valores/valores_card-img1.webp' %}" alt="Plantação">
                             <div class="overlay_card-text">
                                 <h2>Sustentabilidade</h2>
                                 <p>
@@ -224,7 +226,7 @@
                             </div>
                     </div>
                     <div class="swiper-slide">
-                        <img src="img/valores/valores_card-img2.webp" alt="Parque">
+                        <img src="{% static 'img/valores/valores_card-img2.webp' %}" alt="Parque">
                             <div class="overlay_card-text">
                                 <h2>Beleza natural</h2>
                                 <p>
@@ -234,7 +236,7 @@
                             </div>
                     </div>
                     <div class="swiper-slide">
-                        <img src="img/valores/valores_card-img3.webp" alt="Parque">
+                        <img src="{% static 'img/valores/valores_card-img3.webp' %}" alt="Parque">
                             <div class="overlay_card-text">
                                 <h2>Qualidade</h2>
                                 <p>
@@ -245,7 +247,7 @@
                             </div>
                     </div>
                     <div class="swiper-slide">
-                        <img src="img/valores/valores_card-img4.webp" alt="Plantação">
+                        <img src="{% static 'img/valores/valores_card-img4.webp' %}" alt="Plantação">
                             <div class="overlay_card-text">
                                 <h2>Inovação</h2>
                                 <p>
@@ -256,7 +258,7 @@
                             </div>
                     </div>
                     <div class="swiper-slide">
-                        <img src="img/valores/valores_card-img5.webp" alt="Plantação">
+                        <img src="{% static 'img/valores/valores_card-img5.webp' %}" alt="Plantação">
                             <div class="overlay_card-text">
                                 <h2>Comunidade</h2>
                                 <p>
@@ -272,13 +274,13 @@
 
         <!--Seção avaliação-->
         <section id="avaliacao" data-anima="scroll">
-            <img src="img/geral/deco-verdeClaro.svg" alt="Decoraçao Avaliaçao" class="deco_avaliacao">
+            <img src="{% static 'img/geral/deco-verdeClaro.svg' %}" alt="Decoraçao Avaliaçao" class="deco_avaliacao">
             <div class="avaliacao_grid">
                 <div class="avaliacao_content container">
                     
 
                         <div class="avaliacao_text">
-                            <img src="img/avaliacao/quote-top.svg" alt="Aspas" class="top_aspas">
+                            <img src="{% static 'img/avaliacao/quote-top.svg' %}" alt="Aspas" class="top_aspas">
                             <p>
                                 Procurei a Green Gardens para a transformação da 
                                 minha casa em um lar aconchegante. A equipe fez um 
@@ -288,7 +290,7 @@
                             <span>
                                 Maria Joana
                             </span>
-                            <img src="img/avaliacao/quote-bottom.svg" alt="Aspas" class="bottom_aspas">
+                            <img src="{% static 'img/avaliacao/quote-bottom.svg' %}" alt="Aspas" class="bottom_aspas">
                         </div>
                         
                    
@@ -301,18 +303,18 @@
 
         <!--Seção galeria-->
         <section id="galeria" class="container" data-anima="scroll">
-            <img src="img/geral/deco-cinza.svg" alt="Decoração cinza" class="deco_galeria_top">
+            <img src="{% static 'img/geral/deco-cinza.svg' %}" alt="Decoração cinza" class="deco_galeria_top">
             <h1 class="section_title">Galeria</h1>
             <div class="galeria_grid">
-                <img src="img/galeria/galeria-img1.webp" alt="Parque aquático" class="galeria_card">
-                <img src="img/galeria/galeria-img2.webp" alt="Parque aquático" class="galeria_card">
-                <img src="img/galeria/galeria-img3.webp" alt="Parque aquático" class="galeria_card" id="remove">
+                <img src="{% static 'img/galeria/galeria-img1.webp' %}" alt="Parque aquático" class="galeria_card">
+                <img src="{% static 'img/galeria/galeria-img2.webp' %}" alt="Parque aquático" class="galeria_card">
+                <img src="{% static 'img/galeria/galeria-img3.webp' %}" alt="Parque aquático" class="galeria_card" id="remove">
             </div>
             <button id="showMoreGaleria" class="button_show_more">
                 <p>Veja mais</p>
-                <img src="img/galeria/seta.svg" alt="Seta para a direita">
+                <img src="{% static 'img/galeria/seta.svg' %}" alt="Seta para a direita">
             </button>
-            <img src="img/geral/deco-cinza.svg" alt="Decoração cinza" class="deco_galeria_bottom">
+            <img src="{% static 'img/geral/deco-cinza.svg' %}" alt="Decoração cinza" class="deco_galeria_bottom">
         </section>
 
         <!--Seção contato-->
@@ -325,7 +327,7 @@
                 
                 <div class="local_text">
                   <span class="informations">
-                    <img src="img/contato/pin-local.svg" alt="Pin locaizaçao">
+                    <img src="{% static 'img/contato/pin-local.svg' %}" alt="Pin locaizaçao">
                     <p>
                       Avenida central, Nº 0
                       Natal- RN
@@ -333,13 +335,13 @@
                     </p>
                   </span>
                   <span class="informations">
-                    <img src="img/contato/email-icon.svg" alt="ícone do email">
+                    <img src="{% static 'img/contato/email-icon.svg' %}" alt="ícone do email">
                     <p>
                       greengardens@gmail.com
                     </p>
                   </span>
                   <span class="informations">
-                    <img src="img/contato/telefone-icon.svg" alt="ícone telefone">
+                    <img src="{% static 'img/contato/telefone-icon.svg' %}" alt="ícone telefone">
                     <p>
                       (84) 9 4002-8922
                     </p>
@@ -347,8 +349,8 @@
                 </div>
                 
                 <div class="social_links">
-                  <a href=""><img src="img/contato/insta-icon.svg" alt="ícone Instagram"></a>
-                  <a href=""><img src="img/contato/face-icon.svg" alt="ícone Facebook"></a>
+                  <a href=""><img src="{% static 'img/contato/insta-icon.svg' %}" alt="ícone Instagram"></a>
+                  <a href=""><img src="{% static 'img/contato/face-icon.svg' %}" alt="ícone Facebook"></a>
 
                 </div>
               </div>
@@ -387,7 +389,7 @@
             </div>
           </div> 
           
-          <img src="img/geral/deco-cinza.svg" alt="Decoração cinza" class="deco_contato">
+          <img src="{% static 'img/geral/deco-cinza.svg' %}" alt="Decoração cinza" class="deco_contato">
 
         </section>
     </main>
@@ -395,7 +397,7 @@
     <footer>
         <!--Footer da página-->
         <div class="footer_grid container">
-            <img src="img/footer/logo_footer.svg" alt="Logo do footer" class="logo_footer">
+            <img src="{% static 'img/footer/logo_footer.svg' %}" alt="Logo do footer" class="logo_footer">
 
             <div class="footer_contato">
                 <h2>Contato</h2>
@@ -413,8 +415,8 @@
                 </div>
 
                 <div class="social_footer">
-                    <a href=""><img src="img/footer/insta-logo-white.svg" alt="ícone Instagram"></a>
-                    <a href=""><img src="img/footer/face-logo-white.svg" alt="ícone Facebook"></a>
+                    <a href=""><img src="{% static 'img/footer/insta-logo-white.svg' %}" alt="ícone Instagram"></a>
+                    <a href=""><img src="{% static 'img/footer/face-logo-white.svg' %}" alt="ícone Facebook"></a>
                 </div>
             </div>
 
@@ -473,6 +475,6 @@
     
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>  <!--Link lib alertas-->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>   <!--Link lib slider-->
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
