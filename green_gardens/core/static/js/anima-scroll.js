@@ -1,0 +1,1 @@
+export default function initAnimationScroll(){const n=document.querySelectorAll('[data-anima="scroll"]'),t=.8*window.innerHeight;if(n.length>0){function i(){n.forEach((n=>{n.getBoundingClientRect().top-t<0&&n.classList.add("active_animation_scroll")}))}i(),window.addEventListener("scroll",i)}}
