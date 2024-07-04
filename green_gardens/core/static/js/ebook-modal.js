@@ -1,1 +1,110 @@
-export default function initEbookModal(){const e=document.querySelector(".modal_box"),t=document.getElementById("modalForm");function o(e){e.classList.remove("active_animation")}document.querySelectorAll("[data-buttonModal]").forEach((o=>{o.addEventListener("click",(()=>{e.classList.add("active_animation"),t.style.display="block"}))}));document.getElementById("backModalBtn").addEventListener("click",(t=>{t.preventDefault(),o(e)})),e.addEventListener("click",(t=>{t.target===e&&o(e)}));const n=document.getElementById("modalName");d(n);const a=document.getElementById("modalTelefone");d(a);const l=document.getElementById("modalEmail");function d(e){e.addEventListener("input",(e=>{e.target.value}))}d(l);const c=document.getElementById("downloadFinished");document.getElementById("dowloadModalBtn").addEventListener("click",(e=>{e.preventDefault();n.value.length>3&&a.value.length>8&&l.value.length>7?(t.style.display="none",c.classList.add("active_animation"),Toastify({text:"Sucesso!",duration:3e3,close:!0,gravity:"top",position:"right",stopOnFocus:!1,style:{background:"white",color:"#242C12"}}).showToast(),n.value="",a.value="",l.value=""):Toastify({text:"Preencha os campos corretamente!",duration:3e3,close:!0,gravity:"top",position:"right",stopOnFocus:!0,style:{background:"red"}}).showToast()}));document.getElementById("CloseDowloadBtn").addEventListener("click",(t=>{t.preventDefault(),o(e),o(c)}))}
+export default function initEbookModal() {
+    const modalBox = document.querySelector('.modal_box');
+    const modalForms = document.getElementById('modalForm')
+    
+    //Abrir o modal
+    
+    const openModalBtns = document.querySelectorAll('[data-buttonModal]');
+    openModalBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            modalBox.classList.add('active_animation');
+            modalForms.style.display = 'block';
+        })
+    })
+    
+    
+    //Fechar o modal
+    
+    function closeModal(modal) { 
+        modal.classList.remove('active_animation')
+    }
+    
+    const closeModalBtn = document.getElementById('backModalBtn');
+    closeModalBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        closeModal(modalBox);
+    });
+    
+    //Fechar modal com outise click
+    
+    modalBox.addEventListener('click', (event) => {
+        if(event.target === modalBox) {
+            closeModal(modalBox)
+        }
+    })
+    
+    
+    // Verifica os input e abre modal download com sucesso
+    
+    const modalInputName = document.getElementById('modalName');
+    addInputListener(modalInputName);
+    const modalInputPhone = document.getElementById('modalTelefone');
+    addInputListener(modalInputPhone);
+    const modalInputEmail = document.getElementById('modalEmail');
+    addInputListener(modalInputEmail)
+    
+    function addInputListener(input) {  
+        input.addEventListener('input', (event) => {   // Adicionar um Listener pra cada input, sem precisar repetir
+            let inputValue = event.target.value;
+    
+        })
+    }
+    
+    const downloadFinished = document.getElementById('downloadFinished');
+    
+    const downloadBtn = document.getElementById('dowloadModalBtn');
+    downloadBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const verified = modalInputName.value.length  > 3 && modalInputPhone.value.length > 8 && modalInputEmail.value.length > 7;
+        
+        if(verified) {
+            modalForms.style.display = 'none';
+            downloadFinished.classList.add('active_animation')
+            
+            Toastify({ //Lib de alert 
+                text: "Sucesso!",
+                duration: 3000,
+                close: true,
+                gravity: "top", 
+                position: "right", 
+                stopOnFocus: false, 
+                style: {
+                  background: "white",
+                  color: "#242C12"
+                }
+            }).showToast();
+
+            modalInputName.value = '';
+            modalInputPhone.value = ''; // Resetar os campos de input
+            modalInputEmail.value = '';
+    
+        }else {
+            Toastify({ //Lib de alert 
+                text: "Preencha os campos corretamente!",
+                duration: 3000,
+                close: true,
+                gravity: "top", 
+                position: "right",
+                stopOnFocus: true, 
+                style: {
+                  background: "red",
+                },
+                
+              }).showToast();
+        }
+    
+    })
+    
+    
+    // Fechar o a tela de dowload com sucesso
+    
+    const closeDowloadBtn = document.getElementById('CloseDowloadBtn');
+    closeDowloadBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        closeModal(modalBox); // Fechar o modal inteiro
+        closeModal(downloadFinished); // Fechar a tela de download
+    })
+}
+
+
