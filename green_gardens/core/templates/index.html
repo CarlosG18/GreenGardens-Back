@@ -1,11 +1,11 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{config_site.linguagem}}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Empresa de paisagismo">
+    <meta name="description" content="{{config_site.descricao}}">
 
     <link rel="preload" href="{% static 'img/geral/logo.svg' %}" as="image">
     <link rel="preload" href="{% static 'img/slider/slider-img1.jpeg' %}" as="image">
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <title>Green Gardens</title>
+    <title>{{config_site.title}}</title>
 </head>
 <body>
     
@@ -61,7 +61,7 @@
                 <!-- Additional required wrapper -->
                 <div class="swiper-wrapper">
                   <!-- Slides -->
-                   {% for imagem in imgs %}
+                   {% for imagem in imgs_banner_principal %}
                         <div class="swiper-slide">
                             <div class="overlay"></div>
                             <img src="{{imagem.img.url}}" alt="{{imagem.alt}}">
@@ -88,9 +88,7 @@
                     <div class="right_side-content">
                         <img src="{% static 'img/geral/logo.svg' %}" alt="Logo Green Gardens">
                         <p>
-                            Desde 2014 nossa missão é transformar espaços urbanos e 
-                            residenciais em ambientes verdes e sustentáveis, promovendo 
-                            a harmonia entre a natureza e a vida moderna. 
+                            {{sobre.descricao}}
                         </p>
                         <a href="#contato" class="home_contact_button">Entrar em Contato</a>
                     </div>
@@ -103,7 +101,7 @@
         <section id="servicos" data-anima="scroll">
             <img src="{% static 'img/geral/deco-cinza.svg' %}" alt="Decoração cinza" class="deco_home-top">
             <div class="servicos container">
-                <h1 class="section_title">Nossos serviços</h1>
+                <h1 class="section_title">{{secao_nossos_servicos.titulo}}</h1>
                 <div class="servicos_grid container">
                     {% for imagem in imgs_nossos_servicos %}
                         <div class="servicos_card">
@@ -123,29 +121,25 @@
               
                 <div class="swiper-wrapper">
                  
-                  <div class="swiper-slide">
-                    <div class="servicos_mobile_card">
-                        <img src="{% static 'img/servicos/paisagismo-urbano.webp' %}" alt="Paisagismo Urbano">
-                        <p class="container">Paisagismo Urbano</p>
-                    </div>
-                  </div>
-
-                  <div class="swiper-slide">
-                    <div class="servicos_mobile_card">
-                        <img src="{% static 'img/servicos/paisagismo-interno.webp' %}" alt="Paisagismo Interno" loading="lazy">
-                        <p class="container">Paisagismo Interno</p>
-                    </div>
-                  </div>
+                    {% for imagem in imgs_nossos_servicos %}
+                        <div class="swiper-slide">
+                            <div class="servicos_mobile_card">
+                                <img src="{{imagem.img.url}}" alt="{{imagem.alt}}">
+                                <p class="container">{{imagem.titulo}}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                
                 </div>
 
 
              
 
                 <div class="swiper-button-next-servicos">
-                    <img src="{% static 'img/servicos/next-arrow.svg' %}" alt="Seta de próximo">
+                    <img src="{% static 'img/nossos_serviços/next-arrow.svg' %}" alt="Seta de próximo">
                 </div>
                 <div class="swiper-button-prev-servicos">
-                    <img src="{% static 'img/servicos/prev-arrow.svg' %}" alt="Seta de anterior">
+                    <img src="{% static 'img/nossos_serviços/prev-arrow.svg' %}" alt="Seta de anterior">
                 </div>
 
              
@@ -201,64 +195,21 @@
         
         <!--Seção valores-->
         <section id="valores" class="container" data-anima="scroll">
-            <h1 class="section_title">Valores</h1>
+            <h1 class="section_title">{{secao_valores.titulo}}</h1>
             <img src="{% static 'img/geral/deco-cinza.svg' %}" alt="Decoração cinza" class="valores_deco">
             <div class="carrossel_valores">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                            <img src="{% static 'img/valores/valores_card-img1.webp' %}" alt="Plantação">
+                    {% for imagem in imgs_valores %}
+                        <div class="swiper-slide">
+                            <img src="{{imagem.img.url}}" alt="{{imagem.alt_img}}">
                             <div class="overlay_card-text">
-                                <h2>Sustentabilidade</h2>
+                                <h2>{{imagem.titulo}}</h2>
                                 <p>
-                                    Priorizar práticas ecologicamente 
-                                    responsáveis em todos os aspectos do 
-                                    nosso trabalho.
+                                    {{imagem.descricao}}
                                 </p>
                             </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="{% static 'img/valores/valores_card-img2.webp' %}" alt="Parque">
-                            <div class="overlay_card-text">
-                                <h2>Beleza natural</h2>
-                                <p>
-                                    Valorizar a estética natural e a 
-                                    biodiversidade em nossos projetos.
-                                </p>
-                            </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="{% static 'img/valores/valores_card-img3.webp' %}" alt="Parque">
-                            <div class="overlay_card-text">
-                                <h2>Qualidade</h2>
-                                <p>
-                                    Garantir a mais alta qualidade em 
-                                    nossos serviços e produtos, superando 
-                                    as expectativas dos clientes.
-                                </p>
-                            </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="{% static 'img/valores/valores_card-img4.webp' %}" alt="Plantação">
-                            <div class="overlay_card-text">
-                                <h2>Inovação</h2>
-                                <p>
-                                    Integrar novas técnicas e ideias 
-                                    para criar soluções paisagísticas 
-                                        inovadoras.
-                                </p>
-                            </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="{% static 'img/valores/valores_card-img5.webp' %}" alt="Plantação">
-                            <div class="overlay_card-text">
-                                <h2>Comunidade</h2>
-                                <p>
-                                    Contribuir para o bem-estar das comunidades 
-                                    locais, criando espaços verdes acessíveis e 
-                                    agradáveis para todos.
-                                </p>
-                            </div>
-                    </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>
@@ -273,13 +224,10 @@
                         <div class="avaliacao_text">
                             <img src="{% static 'img/avaliacao/quote-top.svg' %}" alt="Aspas" class="top_aspas">
                             <p>
-                                Procurei a Green Gardens para a transformação da 
-                                minha casa em um lar aconchegante. A equipe fez um 
-                                trabalho incrível, com muito cuidado e atenção em 
-                                todos os detalhes.
+                                {{avaliacao.comentario}}
                             </p>
                             <span>
-                                Maria Joana
+                                {{avaliacao.autor}}
                             </span>
                             <img src="{% static 'img/avaliacao/quote-bottom.svg' %}" alt="Aspas" class="bottom_aspas">
                         </div>
@@ -295,11 +243,11 @@
         <!--Seção galeria-->
         <section id="galeria" class="container" data-anima="scroll">
             <img src="{% static 'img/geral/deco-cinza.svg' %}" alt="Decoração cinza" class="deco_galeria_top">
-            <h1 class="section_title">Galeria</h1>
+            <h1 class="section_title">{{secao_galeria.titulo}}</h1>
             <div class="galeria_grid">
-                <img src="{% static 'img/galeria/galeria-img1.webp' %}" alt="Parque aquático" class="galeria_card">
-                <img src="{% static 'img/galeria/galeria-img2.webp' %}" alt="Parque aquático" class="galeria_card">
-                <img src="{% static 'img/galeria/galeria-img3.webp' %}" alt="Parque aquático" class="galeria_card" id="remove">
+                {% for imagem in imgs_galeria %}
+                    <img src="{{imagem.img.url}}" alt="{{imagem.alt_img}}" class="galeria_card">
+                {% endfor %}
             </div>
             <button id="showMoreGaleria" class="button_show_more">
                 <p>Veja mais</p>
@@ -314,34 +262,32 @@
             <h1 class="section_title">Contato</h1>
             <div class="contato_grid">
               <div class="local_side">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3969.086698784101!2d-35.2019702240527!3d-5.843404357589081!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b2ff82aa3e3b4d%3A0x20c4bb30f68e7bc3!2sEscola%20de%20Ci%C3%AAncias%E2%80%8B%20e%20Tecnologia%20(ECT%2FUFRN)!5e0!3m2!1spt-BR!2sbr!4v1718911337805!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="{{config_site.maps}}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 
                 <div class="local_text">
                   <span class="informations">
                     <img src="{% static 'img/contato/pin-local.svg' %}" alt="Pin locaizaçao">
                     <p>
-                      Avenida central, Nº 0
-                      Natal- RN
-                      Brasil - Terra - Via Láctea
+                      {{config_site.endereco}}
                     </p>
                   </span>
                   <span class="informations">
                     <img src="{% static 'img/contato/email-icon.svg' %}" alt="ícone do email">
                     <p>
-                      greengardens@gmail.com
+                      {{config_site.email}}
                     </p>
                   </span>
                   <span class="informations">
                     <img src="{% static 'img/contato/telefone-icon.svg' %}" alt="ícone telefone">
                     <p>
-                      (84) 9 4002-8922
+                      {{config_site.telefone}}
                     </p>
                   </span>
                 </div>
                 
                 <div class="social_links">
-                  <a href=""><img src="{% static 'img/contato/insta-icon.svg' %}" alt="ícone Instagram"></a>
-                  <a href=""><img src="{% static 'img/contato/face-icon.svg' %}" alt="ícone Facebook"></a>
+                  <a href="{{config_site.link_insta}}"><img src="{% static 'img/contato/insta-icon.svg' %}" alt="ícone Instagram"></a>
+                  <a href="{{config_site.link_face}}"><img src="{% static 'img/contato/face-icon.svg' %}" alt="ícone Facebook"></a>
 
                 </div>
               </div>
@@ -395,19 +341,18 @@
 
                 <div class="email_telefone">
                     <p>
-                        (84) 9 4002-8922 
-                        greengardens@gmail.com
+                        {{config_site.telefone}}
+                        {{config_site.email}}
                     </p>
                 </div>
 
                 <div class="footer_local">
-                    Avenida central, Nº 0
-                    Natal- RN
+                    {{config_site.endereco}}
                 </div>
 
                 <div class="social_footer">
-                    <a href=""><img src="{% static 'img/footer/insta-logo-white.svg' %}" alt="ícone Instagram"></a>
-                    <a href=""><img src="{% static 'img/footer/face-logo-white.svg' %}" alt="ícone Facebook"></a>
+                    <a href="{{config_site.link_insta}}"><img src="{% static 'img/footer/insta-logo-white.svg' %}" alt="ícone Instagram"></a>
+                    <a href="{{config_site.link_face}}"><img src="{% static 'img/footer/face-logo-white.svg' %}" alt="ícone Facebook"></a>
                 </div>
             </div>
 
