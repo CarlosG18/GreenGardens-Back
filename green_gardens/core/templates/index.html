@@ -292,29 +292,29 @@
                 </div>
               </div>
 
-              <form action="https://formsubmit.co/7e0e2f314819fb2e4f26bcf8676df161" method="POST" class="form_contato">
+              <form action="{% url 'landingPage:index' %}" method="POST" class="form_contato">
+                {% csrf_token %}
 
                 <div class="side_a_side_input">
-                    <label for="nome">Nome <br>
-                        <input type="text" name="nome" placeholder="Seu nome" required>
+                    
+                    <label for="{{form_contato.nome.name}}">{{form_contato.nome.label}} <br>
+                        {{form_contato.nome}}
                     </label>
                     
-
-                    <label for="telefone">Telefone <br>
-                        <input type="text" name="telefone" placeholder="(xx) xxxxx-xxxx" required>
+                    <label for="{{form_contato.telefone.name}}">{{form_contato.telefone.label}} <br>
+                        {{form_contato.telefone}}
                     </label>
+
                 </div>
-
-                <label for="email">Email <br>
-                    <input type="email" name="email" placeholder="nome@email.com" required>
+                
+                <label for="{{form_contato.email.name}}">{{form_contato.email.label}} <br>
+                    {{form_contato.email}}
                 </label>
-                
 
-                <label for="mensagem">Mensagem <br>
-                    <textarea name="mensagem" rows="10" cols="30" placeholder="O que você precisa?" required></textarea>
+                <label for="{{form_contato.mensagem.name}}">{{form_contato.mensagem.label}} <br>
+                    {{form_contato.mensagem}}
                 </label>
-                
-                
+
                 <button type="submit" id="send_message">Enviar mensagem</button>
 
                 <!--Inputs da API-->

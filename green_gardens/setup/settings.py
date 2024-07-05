@@ -135,9 +135,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'core/static/img/')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # configurações de envio de email
-#EMAIL_BACKEND = str(os.getenv('EMAIL_BACKEND'))
-#EMAIL_HOST = str(os.getenv('EMAIL_HOST'))
-#EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
-#EMAIL_PORT = os.getenv('EMAIL_PORT')
-#EMAIL_HOST_USER = str(os.getenv('EMAIL_HOST_USER'))
-#EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_HOST_PASSWORD'))
+EMAIL_BACKEND = str(os.getenv('EMAIL_BACKEND'))
+EMAIL_HOST = str(os.getenv('EMAIL_HOST'))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = str(os.getenv('EMAIL_HOST_USER'))
+EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_HOST_PASSWORD'))
