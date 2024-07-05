@@ -61,19 +61,12 @@
                 <!-- Additional required wrapper -->
                 <div class="swiper-wrapper">
                   <!-- Slides -->
-                    <div class="swiper-slide">
-                        <div class="overlay"></div>
-                        <img src="{% static 'img/slider/slider-img1.webp' %}" alt="Quintal de plantas">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="{% static 'img/slider/slider-img2.webp' %}" alt="Parque" loading="lazy">
-                        <div class="overlay"></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="{% static 'img/slider/slider-img3.webp' %}" alt="Restaurante" loading="lazy">
-                        <div class="overlay"></div>
-                    </div>
-                    </div>
+                   {% for imagem in imgs %}
+                        <div class="swiper-slide">
+                            <div class="overlay"></div>
+                            <img src="{{imagem.img.url}}" alt="{{imagem.alt}}">
+                        </div>
+                   {% endfor %}
                 <!-- If we need pagination -->
                 <div class="swiper-pagination"></div>
               
@@ -112,14 +105,12 @@
             <div class="servicos container">
                 <h1 class="section_title">Nossos serviços</h1>
                 <div class="servicos_grid container">
-                    <div class="servicos_card">
-                        <img src="{% static 'img/servicos/paisagismo-urbano.webp' %}" alt="Paisagismo urbano">
-                        <p>Paisagismo urbano</p>
-                    </div>
-                    <div class="servicos_card">
-                        <img src="{% static 'img/servicos/paisagismo-interno.webp' %}" alt="Paisagismo de áreas internas">
-                        <p>Paisagismo de áreas internas</p>
-                    </div>
+                    {% for imagem in imgs_nossos_servicos %}
+                        <div class="servicos_card">
+                            <img src="{{imagem.img.url}}" alt="{{imagem.alt}}">
+                            <p>{{imagem.titulo}}</p>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
             <img src="{% static 'img/geral/deco-cinza.svg' %}" alt="Decoração cinza" class="deco_home-bottom">

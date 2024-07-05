@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import ElementoImagem
 
-# Register your models here.
+@admin.register(ElementoImagem)
+class ElementoCarroselsConfig(admin.ModelAdmin):
+    list_filter = ["secao"]

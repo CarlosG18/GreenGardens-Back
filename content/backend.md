@@ -4,7 +4,7 @@
 
 ## Diagrama UML e Banco de dados
 
-Por se tratar de uma Landing Page os modelos em si não possui tantos relacionamentos, irei desenvolver o diagrama apenas com modelos que se relacionam.
+
 
 ## 🛠️ Criação dos Modelos
 
