@@ -27,7 +27,7 @@ class Secao(models.Model):
 
 class ConfigSite(models.Model):
     """
-        modelo para dinamizar algumas configuraçoes da landing page
+        modelo para dinamizar algumas configuraçoes da landing page (inclui links do footer, titulo do site, linguagem, contatos)
     """
 
     class Meta:
