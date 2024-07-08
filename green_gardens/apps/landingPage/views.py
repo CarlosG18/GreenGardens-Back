@@ -1,12 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import ElementoImagem, ConfigSite, Secao, Avaliacao, Ebook
 from django.http import HttpResponse
-from .forms import ContatoForm
+from .forms import ContatoForm, EbookForm
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.urls import reverse
+from django.http import FileResponse
+import os
 
 # --------------------------> inicio das funções/classes auxiliares <-------------------------------------------
 
@@ -19,6 +22,9 @@ def get_context(name_session):
     return secao, imgs
 
 def get_context_latest(name_session, limit_number):
+    """
+    
+    """
     secao = get_object_or_404(Secao, titulo=name_session)
     imgs = ElementoImagem.objects.filter(secao=secao).order_by('-id')[:limit_number]
     return secao, imgs
@@ -54,7 +60,6 @@ def index(request):
     # Seção galeria
     secao_galeria, img_galeria = get_context("Galeria")
     width = int(request.GET.get('width',0))
-    print(f"entrou {width}")
     if width >= 1000:
         img_galeria = img_galeria[:2]
     else:
@@ -74,11 +79,11 @@ def index(request):
     # ebook principal - o que será visualizado na landing page
     ebook_principal = Ebook.objects.latest('id')
 
-    # parte de tratamento do forms de contato e envio de email personalizado
+
     if request.method == "POST":
+        # parte de tratamento do forms de contato e envio de email personalizado
         form_contato = ContatoForm(request.POST)
         if form_contato.is_valid():
-            print("validou!!")
             assunto = "Pedido de Contato"
             email_from = settings.EMAIL_HOST_USER
             destinatario = [form_contato.cleaned_data['email']]
@@ -98,10 +103,9 @@ def index(request):
 
     else:
         form_contato = ContatoForm()
+    
+    form_ebook = EbookForm()
 
-    # parte para tratamento do forms para validação do download do ebook
-
-    # parte para tratamento do download do arquivo do ebook
 
     return render(request, 'index.html', {
        'imgs_banner_principal': imgs_banner_principal,
@@ -120,6 +124,7 @@ def index(request):
        'secao_ebook': secao_ebook,
        'ebooks': ebooks,
        'ebook_principal': ebook_principal,
+       'form_ebook': form_ebook,
     })
 
 def dynamic_css_view(request):
@@ -130,3 +135,22 @@ def dynamic_css_view(request):
     }
     response = render(request, 'styles/dynamic_styles.css', context, content_type='text/css')
     return HttpResponse(response)
+
+def download_ebook(request):
+    """
+        view para tratamento do forms para validação do download do ebook
+    """
+    
+    if request.method == "POST":
+        form_ebook = EbookForm(request.POST)
+        if form_ebook.is_valid():
+            ebook = Ebook.objects.latest('id')
+            file_path = os.path.join(settings.MEDIA_ROOT, ebook.conteudo.name)
+            print(file_path)
+            messages.success(request, "email enviado com sucesso!")
+            return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=ebook.conteudo.name)
+        else:
+            messages.error(request, "erro no download!")
+
+    url = reverse('landingPage:index')
+    return redirect(f'{url}#ebooks')

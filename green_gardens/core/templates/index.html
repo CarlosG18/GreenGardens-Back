@@ -171,11 +171,7 @@
             <div class="ebooks_mobile_grid container">
                 
                 <p id="ebooks_mobile_text" class="ebooks_mobile_text">
-                    Descubra as melhores práticas de cuidados e paisagismo 
-                    com o nosso eBook exclusivo! Aprenda a transformar seu 
-                    jardim em um paraíso verde com dicas detalhadas de plantio 
-                    poda e manutenção. Domine técnicas de design paisagístico 
-                    para criar espaços harmoniosos e funcionais. 
+                    {{secao_ebook.descricao}}
                     <span id="read_more_text" class="read_more_text">
                         Seja um expert em jardinagem e desfrute de um ambiente natural deslumbrante.    
                     </span>
@@ -373,33 +369,59 @@
     <!--Seção modal download ebook -->
     <section id="modal">
         <div class="modal_box">
-            <form id="modalForm">
+            <form id="modalForm" action="{% url 'landingPage:download_ebook' %}" method="POST">
+                {% csrf_token %}
                 <div class="modal_side_input">
                     <label for="modalName">
-                        Nome <br>
-                        <input type="text" name="modalName" placeholder="Seu nome" id="modalName">
+                        {{form_ebook.nome.label}} <br>
+                        {{form_ebook.nome}}
                     </label>
                     <label for="modalTelefone">
-                        Telefone <br>
-                        <input type="text" name="modalTelefone" placeholder="(xx) xxxxx-xxxxx" id="modalTelefone">
+                        {{form_ebook.telefone.label}} <br>
+                        {{form_ebook.telefone}}
+                        {% for error in form_ebook.telefone.errors %}
+                            <div class="alert-danger" role="alert">
+                                {{error}}
+                            </div>  
+                        {% endfor %}
                     </label>
                 </div>
 
                 <label for="modalEmail">
-                    Email <br>
-                    <input type="email" name="modalEmail" placeholder="nome@email.com" id="modalEmail">
+                    {{form_ebook.email.label}} <br>
+                    {{form_ebook.email}}
+                    {% for error in form_ebook.email.errors %}
+                        <div class="alert-danger" role="alert">
+                            {{error}}
+                        </div>  
+                    {% endfor %}
                 </label>
 
                 <div class="modal_buttons">
                     <button id="backModalBtn">Voltar</button>
-                    <button id="dowloadModalBtn">Fazer download</button>
+                    <button type="submit" id="dowloadModalBtn">Fazer download</button>
                 </div>
             </form>
 
-            <div class="download_finished" id="downloadFinished">
-                <p>O download foi realizado com sucesso, obrigado!</p>
-                <button id="CloseDowloadBtn">Voltar</button>
-            </div>
+            {% if messages %}
+                {% for msg in messages %}
+                    {% if msg == "email enviado com sucesso!" %}
+                        {{msg}}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            {% if messages %}
+                {% for msg in messages %}
+                    {% if msg == "email enviado com sucesso!" %}
+                        <div class="download_finished" id="downloadFinished">
+                            <p>O download foi realizado com sucesso, obrigado!</p>
+                            <button id="CloseDowloadBtn">Voltar</button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            
         </div>
     </section>
     
