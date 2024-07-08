@@ -19,7 +19,7 @@ class ContatoForm(forms.Form):
     )
 
     telefone = forms.CharField(
-        max_length=16,
+        max_length=15,
         label="Telefone",
         required=True,
         widget=forms.TextInput(
@@ -68,7 +68,7 @@ class ContatoForm(forms.Form):
 
     # função para validar o formato de telefone, definido como validos os padrões referentes ao brasil
     def clean_telefone(self):
-        tel_regex = r"^(?:\+\d{2}\s?)?(?:(?:\d{2}\s)?\d{4,5}-\d{4}|\d{4,5}-\d{4}|\d{4,5}\s\d{4}|\d{8,9})$"
+        tel_regex = r"^\(\d{2}\) \d{5}-\d{4}$"
         tel = self.cleaned_data.get('telefone')
 
         if tel:

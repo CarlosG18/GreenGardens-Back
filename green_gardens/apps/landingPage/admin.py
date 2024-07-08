@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import ElementoImagem, ConfigSite, Secao, Avaliacao
+from .models import ElementoImagem, ConfigSite, Secao, Avaliacao, Ebook
+from django.core.exceptions import ValidationError
 
 class SingletonModelAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
@@ -36,11 +37,16 @@ class ElementoCarroselsConfig(admin.ModelAdmin):
 
 @admin.register(Secao)
 class SecaoConfig(admin.ModelAdmin):
-    pass
+    def has_add_permission(self, request):
+        # Retorna False se houver 6 ou mais instâncias de Secao
+        if Secao.objects.count() >= 7:
+            return False
+        return super().has_add_permission(request)
 
-@admin.register(Avaliacao)
-class AvaliacaoConfig(admin.ModelAdmin):
-    pass
+admin.site.register(Avaliacao)
+admin.site.register(Ebook)
+
+
 
 
 

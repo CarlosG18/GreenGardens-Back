@@ -5,7 +5,13 @@ import os
 # --------------------------> funções/classes auxiliares <-------------------------------------------
 
 def dinamic_path(instance, filename):
-    return os.path.join(instance.secao.path, filename)
+    return os.path.join("img/"+instance.secao.path, filename)
+
+def path_ebook(instance, filename):
+    return os.path.join("ebook/"+instance.assunto, filename)
+
+def path_img_ebook(instance, filename):
+    return os.path.join("img/ebook/"+instance.assunto, filename)
 
 # ----------------------------> Modelos <------------------------------------------------------------
 
@@ -15,12 +21,17 @@ class Secao(models.Model):
         verbose_name_plural = "seções"
     
     titulo = models.CharField(max_length=100, blank=True, null=True)
-    path = models.CharField(max_length=200, blank=False, null=False, help_text="apenas letras minusculas e sem espaços", validators=[
+    path = models.CharField(max_length=200, blank=False, editable=False, null=False, validators=[
         RegexValidator(
             regex=r'^[a-zA-Z0-9_]+$'
         )
     ])
     descricao = models.TextField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.titulo:
+            self.path = self.titulo.lower().replace(' ', '_')
+        super(Secao, self).save(*args, **kwargs)
 
     def __str__(self):
         return f'seção {self.titulo}'
@@ -91,3 +102,16 @@ class Avaliacao(models.Model):
 
     def __str__(self):
         return f'avaliação da(o) {self.autor}'
+    
+class Ebook(models.Model):
+    """
+        modelo para dinamizar os ebook que serão disponiveis para download
+    """
+
+    titulo = models.CharField(max_length=200, blank=False, null=False)
+    assunto = models.CharField(max_length=200, blank=False, null=False)
+    conteudo = models.FileField(upload_to=path_ebook, blank=False, null=False)
+    img_capa = models.ImageField(upload_to=path_img_ebook,blank=False, null=False)
+
+    def __str__(self):
+        return f'ebook - {self.titulo}'
