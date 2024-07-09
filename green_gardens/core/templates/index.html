@@ -284,7 +284,7 @@
                 </div>
               </div>
 
-              <form action="{% url 'landingPage:index' %}" method="POST" class="form_contato">
+              <form action="{% url 'landingPage:index' %}#contato" method="POST" class="form_contato">
                 {% csrf_token %}
 
                 <div class="side_a_side_input">
@@ -295,7 +295,6 @@
                     
                     <label for="{{form_contato.telefone.name}}">{{form_contato.telefone.label}} <br>
                         {{form_contato.telefone}}
-
                         {% for error in form_contato.telefone.errors %}
                             <div class="alert alert-danger" role="alert">
                                 {{error}}
@@ -369,18 +368,18 @@
     <!--Seção modal download ebook -->
     <section id="modal">
         <div class="modal_box">
-            <form id="modalForm" action="{% url 'landingPage:download_ebook' %}" method="POST">
+            <form id="modalForm" action="{% url 'landingPage:index' %}#ebooks" method="POST">
                 {% csrf_token %}
                 <div class="modal_side_input">
                     <label for="modalName">
-                        {{form_ebook.nome.label}} <br>
-                        {{form_ebook.nome}}
+                        {{form_ebook.nome_ebook.label}} <br>
+                        {{form_ebook.nome_ebook}}
                     </label>
                     <label for="modalTelefone">
-                        {{form_ebook.telefone.label}} <br>
-                        {{form_ebook.telefone}}
-                        {% for error in form_ebook.telefone.errors %}
-                            <div class="alert-danger" role="alert">
+                        {{form_ebook.telefone_ebook.label}} <br>
+                        {{form_ebook.telefone_ebook}}
+                        {% for error in form_ebook.telefone_ebook.errors %}
+                            <div class="alert-danger-modal" role="alert">
                                 {{error}}
                             </div>  
                         {% endfor %}
@@ -388,10 +387,10 @@
                 </div>
 
                 <label for="modalEmail">
-                    {{form_ebook.email.label}} <br>
-                    {{form_ebook.email}}
-                    {% for error in form_ebook.email.errors %}
-                        <div class="alert-danger" role="alert">
+                    {{form_ebook.email_ebook.label}} <br>
+                    {{form_ebook.email_ebook}}
+                    {% for error in form_ebook.email_ebook.errors %}
+                        <div class="alert-danger-modal" role="alert">
                             {{error}}
                         </div>  
                     {% endfor %}
@@ -402,28 +401,14 @@
                     <button type="submit" id="dowloadModalBtn">Fazer download</button>
                 </div>
             </form>
-
-            {% if messages %}
-                {% for msg in messages %}
-                    {% if msg == "email enviado com sucesso!" %}
-                        {{msg}}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-
-            {% if messages %}
-                {% for msg in messages %}
-                    {% if msg == "email enviado com sucesso!" %}
-                        <div class="download_finished" id="downloadFinished">
-                            <p>O download foi realizado com sucesso, obrigado!</p>
-                            <button id="CloseDowloadBtn">Voltar</button>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
             
         </div>
     </section>
+
+    <div class="" id="">
+        <p>O download foi realizado com sucesso, obrigado!</p>
+        <button id="CloseDowloadBtn">Voltar</button>
+    </div>
     
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>  <!--Link lib alertas-->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>   <!--Link lib slider-->

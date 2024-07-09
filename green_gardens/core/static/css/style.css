@@ -29,6 +29,11 @@
     font-size: 12px;
 }
 
+.alert-danger-modal {
+    margin: -3.5em 2px 3em 0;
+    color: red;
+    font-size: 12px;
+}
 /*Formatações básicas do site*/
 * {
     margin: 0;

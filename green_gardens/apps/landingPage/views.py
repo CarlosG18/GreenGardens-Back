@@ -79,7 +79,6 @@ def index(request):
     # ebook principal - o que será visualizado na landing page
     ebook_principal = Ebook.objects.latest('id')
 
-
     if request.method == "POST":
         # parte de tratamento do forms de contato e envio de email personalizado
         form_contato = ContatoForm(request.POST)
@@ -99,12 +98,18 @@ def index(request):
             email.attach_alternative(html_content, 'text/html')
             email.send()
             messages.success(request, "email enviado com sucesso!")
-            return redirect('landingPage:index')
-
+        
+        # parte de tratamento do forms para download do ebook
+        form_ebook = EbookForm(request.POST)
+        if form_ebook.is_valid():
+            file_path = os.path.join(settings.MEDIA_ROOT, ebook_principal.conteudo.name)
+            messages.success(request, "email enviado com sucesso!")
+            return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=ebook_principal.conteudo.name)
+        else:
+            messages.error(request, "erro no download!")
     else:
         form_contato = ContatoForm()
-    
-    form_ebook = EbookForm()
+        form_ebook = EbookForm()
 
 
     return render(request, 'index.html', {
@@ -135,22 +140,3 @@ def dynamic_css_view(request):
     }
     response = render(request, 'styles/dynamic_styles.css', context, content_type='text/css')
     return HttpResponse(response)
-
-def download_ebook(request):
-    """
-        view para tratamento do forms para validação do download do ebook
-    """
-    
-    if request.method == "POST":
-        form_ebook = EbookForm(request.POST)
-        if form_ebook.is_valid():
-            ebook = Ebook.objects.latest('id')
-            file_path = os.path.join(settings.MEDIA_ROOT, ebook.conteudo.name)
-            print(file_path)
-            messages.success(request, "email enviado com sucesso!")
-            return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=ebook.conteudo.name)
-        else:
-            messages.error(request, "erro no download!")
-
-    url = reverse('landingPage:index')
-    return redirect(f'{url}#ebooks')

@@ -19,7 +19,7 @@ class ContatoForm(forms.Form):
     )
 
     telefone = forms.CharField(
-        max_length=15,
+        max_length=19,
         label="Telefone",
         required=True,
         widget=forms.TextInput(
@@ -68,7 +68,7 @@ class ContatoForm(forms.Form):
 
     # função para validar o formato de telefone, definido como validos os padrões referentes ao brasil
     def clean_telefone(self):
-        tel_regex = r"^\(\d{2}\) \d{5}-\d{4}$"
+        tel_regex = r"^\(?\+?55\)?\s?\(?\d{2}\)?[\s-]?9?\s?\d{4}[\s-]?\d{4}$|^\(?\d{2}\)?[\s-]?9?\s?\d{4}[\s-]?\d{4}$|^9?\s?\d{4}[\s-]?\d{4}$"
         tel = self.cleaned_data.get('telefone')
 
         if tel:
@@ -82,7 +82,7 @@ class EbookForm(forms.Form):
         classe para tratamento do formulário de validação para o download do ebook
     """
 
-    nome = forms.CharField(
+    nome_ebook = forms.CharField(
         max_length=100,
         label="Nome",
         required=True,
@@ -94,8 +94,8 @@ class EbookForm(forms.Form):
         ),
     )
 
-    telefone = forms.CharField(
-        max_length=15,
+    telefone_ebook = forms.CharField(
+        max_length=19,
         label="Telefone",
         required=True,
         widget=forms.TextInput(
@@ -106,7 +106,7 @@ class EbookForm(forms.Form):
         ),
     )
 
-    email = forms.EmailField(
+    email_ebook = forms.EmailField(
         label="Email",
         required=True,
         widget=forms.EmailInput(
@@ -118,8 +118,8 @@ class EbookForm(forms.Form):
     )
 
     # função para validar o formato do email, permitindo apenas emails válidos
-    def clean_email(self):
-        email_regex = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+    def clean_email_ebook(self):
+        email_regex = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" 
         email = self.cleaned_data.get('email')
 
         if email:
@@ -129,8 +129,9 @@ class EbookForm(forms.Form):
                 raise forms.ValidationError("formato de email invalido!")
             
     # função para validar o formato de telefone, definido como validos os padrões referentes ao brasil
-    def clean_telefone(self):
-        tel_regex = r"^\(\d{2}\) \d{5}-\d{4}$"
+    def clean_telefone_ebook(self):
+        tel_regex = r"^^\(?\+?55\)?\s?\(?\d{2}\)?[\s-]?9?\s?\d{4}[\s-]?\d{4}$|^\(?\d{2}\)?[\s-]?9?\s?\d{4}[\s-]?\d{4}$|^9?\s?\d{4}[\s-]?\d{4}$"
+
         tel = self.cleaned_data.get('telefone')
 
         if tel:
