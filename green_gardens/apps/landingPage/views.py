@@ -35,82 +35,97 @@ def index(request):
     """
         
     """
+    # obtendo os nomes das seções
+    all_secoes = Secao.objects.all()
+    nomes_secoes = [name.titulo for name in all_secoes]
+
+    print(nomes_secoes)
 
     # configurações do site
     config_site = ConfigSite.objects.latest('id')
 
-    # Seção do banner pricipal
-    _, imgs_banner_principal = get_context("Banner Principal")[:5]
+    # Seção 0 : banner pricipal
+    ## obtendo as imagens do banner principal
+    _, imgs_banner_principal = get_context(nomes_secoes[0])[:5]
 
-    # Seção sobre
-    secao_sobre = Secao.objects.get(titulo="Sobre")
+    # Seção 1 : sobre
+    secao_sobre = Secao.objects.get(titulo=nomes_secoes[1])
 
-    # Seção Nossos serviços
-    secao_nossos_servicos, imgs_nossos_servicos = get_context_latest("Nossos Serviços",2)
+    # Seção 2 : Nossos serviços
+    secao_nossos_servicos, imgs_nossos_servicos = get_context_latest(nomes_secoes[2],2)
 
     # Seção Nossos serviços para o mobile
-    _, imgs_nossos_servicos_mobile = get_context_latest("Nossos Serviços",5)
+    _, imgs_nossos_servicos_mobile = get_context_latest(nomes_secoes[2],5)
 
-    # Seção valores
-    secao_valores, imgs_valores = get_context("Valores")
-    
-    # Obtendo a ultima avaliacao
-    last_avaliacao = Avaliacao.objects.latest('id')
-
-    # Seção galeria
-    secao_galeria, img_galeria = get_context("Galeria")
-    width = int(request.GET.get('width',0))
-    if width >= 1000:
-        img_galeria = img_galeria[:2]
-    else:
-        # Seção galeria mobile
-        img_galeria = img_galeria[:3]        
-
-    # Seção avaliação
-    secao_avaliacao = Secao.objects.get(titulo="Avaliacao")
-    img_avaliacao = ElementoImagem.objects.filter(secao=secao_avaliacao).get()
-
-    # seção ebook 
-    secao_ebook = Secao.objects.get(titulo="Ebook")
-
-    # obtendo todos os ebooks
-    ebooks = Ebook.objects.all()
+    # seção 3 : ebook 
+    try:
+        secao_ebook = Secao.objects.get(titulo=nomes_secoes[3])
+    except Secao.DoesNotExist:
+        secao_ebook = None
 
     # ebook principal - o que será visualizado na landing page
-    ebook_principal = Ebook.objects.latest('id')
+    try:
+        ebook_principal = Ebook.objects.latest('id')
+    except Ebook.DoesNotExist:
+        ebook_principal = None
+
+    # Seção 4 : valores
+    secao_valores, imgs_valores = get_context(nomes_secoes[4])
+
+    # Seção 5 : avaliação
+    ## Obtendo a ultima avaliacao
+    try:
+        last_avaliacao = Avaliacao.objects.latest('id')
+    except Avaliacao.DoesNotExist:
+        last_avaliacao = None
+    
+    secao_avaliacao = Secao.objects.filter(titulo=nomes_secoes[5])
+    if last_avaliacao is not None:
+        img_avaliacao = ElementoImagem.objects.filter(secao=secao_avaliacao).get()
+    else:
+        img_avaliacao = None
+
+    # Seção 6 : galeria
+    secao_galeria, img_galeria = get_context(nomes_secoes[6])
 
     if request.method == "POST":
+
         # parte de tratamento do forms de contato e envio de email personalizado
-        form_contato = ContatoForm(request.POST)
-        if form_contato.is_valid():
-            assunto = "Pedido de Contato"
-            email_from = settings.EMAIL_HOST_USER
-            destinatario = [form_contato.cleaned_data['email']]
+        if 'contato_form' in request.POST:    
+            form_ebook = EbookForm()
+            form_contato = ContatoForm(request.POST)
+            if form_contato.is_valid():
+                assunto = "Pedido de Contato"
+                email_from = settings.EMAIL_HOST_USER
+                destinatario = [form_contato.cleaned_data['email']]
 
-            html_content = render_to_string('emails/confirm.html', {
-                "nome": form_contato.cleaned_data['nome'],
-                "telefone": form_contato.cleaned_data['telefone'],
-                "mensagem": form_contato.cleaned_data['mensagem'],
-            })
+                html_content = render_to_string('emails/confirm.html', {
+                    "nome": form_contato.cleaned_data['nome'],
+                    "telefone": form_contato.cleaned_data['telefone'],
+                    "mensagem": form_contato.cleaned_data['mensagem'],
+                })
 
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(assunto, text_content, email_from, destinatario)
-            email.attach_alternative(html_content, 'text/html')
-            email.send()
-            messages.success(request, "email enviado com sucesso!")
-        
+                text_content = strip_tags(html_content)
+                email = EmailMultiAlternatives(assunto, text_content, email_from, destinatario)
+                email.attach_alternative(html_content, 'text/html')
+                email.send()
+                messages.success(request, "email enviado com sucesso!")
+            else:
+                messages.error(request, "erro no envio do email!")
+
         # parte de tratamento do forms para download do ebook
-        form_ebook = EbookForm(request.POST)
-        if form_ebook.is_valid():
-            file_path = os.path.join(settings.MEDIA_ROOT, ebook_principal.conteudo.name)
-            messages.success(request, "email enviado com sucesso!")
-            return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=ebook_principal.conteudo.name)
-        else:
-            messages.error(request, "erro no download!")
+        if 'ebook_form' in request.POST:
+            form_contato = ContatoForm()
+            form_ebook = EbookForm(request.POST)
+            if form_ebook.is_valid():
+                file_path = os.path.join(settings.MEDIA_ROOT, ebook_principal.conteudo.name)
+                messages.success(request, "ebook baixado com sucesso!")
+                return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=ebook_principal.conteudo.name)
+            else:
+                messages.error(request, "erro no download!")
     else:
         form_contato = ContatoForm()
         form_ebook = EbookForm()
-
 
     return render(request, 'index.html', {
        'imgs_banner_principal': imgs_banner_principal,
@@ -127,7 +142,6 @@ def index(request):
        'form_contato': form_contato,
        'img_avaliacao': img_avaliacao,
        'secao_ebook': secao_ebook,
-       'ebooks': ebooks,
        'ebook_principal': ebook_principal,
        'form_ebook': form_ebook,
     })

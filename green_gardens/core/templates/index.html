@@ -62,19 +62,26 @@
                 <div class="swiper-wrapper">
                   <!-- Slides -->
                    {% for imagem in imgs_banner_principal %}
-                        <div class="swiper-slide" style="content: '{{imagem.titulo}}';">
-                            <div class="overlay"></div>
-                            <img src="{{imagem.img.url}}" alt="{{imagem.alt}}">
-                        </div>
-
-                        <!-- If we need pagination -->
-                        <div class="swiper-pagination"></div>
-                    
-                        <!-- If we need navigation buttons -->
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-button-next"></div>
+                        {% if forloop.counter != 1 %}
+                            <div class="swiper-slide">
+                                <img src="{{imagem.img.url}}" alt="{{imagem.alt_img}}" loading="lazy">
+                                <div class="overlay"></div>
+                            </div>
+                        {% else %}
+                            <div class="swiper-slide">
+                                <div class="overlay"></div>
+                                <img src="{{imagem.img.url}}" alt="{{imagem.alt_img}}">
+                            </div>
+                        {% endif %}
                    {% endfor %}
-                
+                </div>
+
+                <!-- If we need pagination -->
+                <div class="swiper-pagination"></div>
+              
+                <!-- If we need navigation buttons -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
               
               </div>
         </section>
@@ -118,7 +125,7 @@
 
         <!--Seção serviços mobile-->
         <section id="servicos_mobile" data-anima="scroll">
-            <h1 class="section_title container">Nossos serviços</h1>
+            <h1 class="section_title container">{{secao_nossos_servicos.titulo}}</h1>
             <div class="carrossel_servicos">
               
                 <div class="swiper-wrapper">
@@ -134,18 +141,12 @@
                 
                 </div>
 
-
-             
-
                 <div class="swiper-button-next-servicos">
                     <img src="{% static 'img/nossos_servicos/next-arrow.svg' %}" alt="Seta de próximo">
                 </div>
                 <div class="swiper-button-prev-servicos">
                     <img src="{% static 'img/nossos_servicos/prev-arrow.svg' %}" alt="Seta de anterior">
                 </div>
-
-             
-              
          
               </div>
         </section>
@@ -154,16 +155,19 @@
         <section id="ebooks" data-anima="scroll">
             <div class="ebooks_grid container">
                 <div class="ebooks_text">
-                    <h1 class="section_title">E-books gratuitos</h1>
+                    <h1 class="section_title">{{secao_ebook.titulo}}</h1>
                     <p>
                         {{secao_ebook.descricao}}
                     </p>
                     <button data-buttonModal>Download gratuito</button>
                 </div>
-                <img src="{{ebook_principal.img_capa.url}}" alt="E-book de {{ebook_principal.assunto}}">
+                {% if ebook_principal %}
+                    <img src="{{ebook_principal.img_capa.url}}" alt="E-book de {{ebook_principal.assunto}}">
+                {% endif %}
             </div>
             <img src="{% static 'img/geral/deco-verdeClaro.svg' %}" alt="Decoraçao serviços" class="deco_servicos">
         </section>
+
 
         <!--Seção ebooks mobile-->
         <section id="ebooks_mobile" data-anima="scroll">
@@ -180,7 +184,7 @@
 
                 <button class="buttonOpenModal_mobile" data-buttonModal>Download gratuito</button>
 
-                <img src="{% static 'img/ebooks/ebook.webp' %}" alt="Guia de cuidados" class="ebooks_mobile_img">
+                <img src="{{ebook_principal.img_capa.url}}" alt="Guia de cuidados" class="ebooks_mobile_img">
 
             </div>
             <img src="{% static 'img/geral/deco-verdeClaro.svg' %}" alt="Decoraçao cinza" class="deco_ebooks_mobile">
@@ -208,12 +212,12 @@
         </section>
 
         <!--Seção avaliação-->
+        {% if avaliacao %}
         <section id="avaliacao" data-anima="scroll">
             <img src="{% static 'img/geral/deco-verdeClaro.svg' %}" alt="Decoraçao Avaliaçao" class="deco_avaliacao">
             <div class="avaliacao_grid">
                 <div class="avaliacao_content container">
                     
-
                         <div class="avaliacao_text">
                             <img src="{% static 'img/avaliacao/quote-top.svg' %}" alt="Aspas" class="top_aspas">
                             <p>
@@ -231,14 +235,19 @@
     
             </div>
         </section>
+        {% endif %}
 
         <!--Seção galeria-->
         <section id="galeria" class="container" data-anima="scroll">
             <img src="{% static 'img/geral/deco-cinza.svg' %}" alt="Decoração cinza" class="deco_galeria_top">
             <h1 class="section_title">{{secao_galeria.titulo}}</h1>
             <div class="galeria_grid">
-                {% for imagem in imgs_galeria %}
-                    <img src="{{imagem.img.url}}" alt="{{imagem.alt_img}}" class="galeria_card">
+                {% for img in imgs_galeria %}
+                    {% if forloop.counter == 3 %}
+                        <img src="{{img.img.url}}" alt="{{img.alt_img}}" class="galeria_card" id="remove">
+                    {% else %}
+                        <img src="{{img.img.url}}" alt="{{img.alt_img}}" class="galeria_card">
+                    {% endif %}
                 {% endfor %}
             </div>
             <button id="showMoreGaleria" class="button_show_more">
@@ -318,7 +327,7 @@
                     {{form_contato.mensagem}}
                 </label>
 
-                <button type="submit" id="send_message">Enviar mensagem</button>
+                <button type="submit" id="send_message" name="contato_form">Enviar mensagem</button>
             </form>
             </div>
           </div> 
@@ -395,44 +404,48 @@
                         </div>  
                     {% endfor %}
                 </label>
-
+                
                 <div class="modal_buttons">
                     <button id="backModalBtn">Voltar</button>
-                    <button type="submit" id="dowloadModalBtn">Fazer download</button>
+                    <button type="submit" id="dowloadModalBtn" name="ebook_form">Fazer download</button>
                 </div>
             </form>
-            
+
         </div>
+
+        {% if messages %}
+            {{messages}}
+            {% for msg in messages %}
+                {{msg}}
+                {% if msg.message == "ebook baixado com sucesso!" %}
+                    <div style="display: block;" class="download_finished" id="downloadFinished">
+                        <p>O download foi realizado com sucesso, obrigado!</p>
+                        <button id="CloseDowloadBtn">Voltar</button>
+                    </div>        
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     </section>
 
-    <div class="" id="">
-        <p>O download foi realizado com sucesso, obrigado!</p>
-        <button id="CloseDowloadBtn">Voltar</button>
-    </div>
+     <!--Seção modal contato-->
+     {% if messages %}
+        {% for msg in messages %}
+            {{msg}}
+            {% if msg.message == "email enviado com sucesso!" %}
+                <section style="display: flex;" id="modal_contato">
+                    <div class="mensagem" id="mensagem">
+                        <p>Mensagem enviada com sucesso, obrigado!</p>
+                        <button id="close_message_btn">Voltar</button>
+                    </div>
+                </section>
+            {% endif %}
+        {% endfor %}
+     {% endif %}
+     
     
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>  <!--Link lib alertas-->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>   <!--Link lib slider-->
     <script type="module" src="{% static 'js/main.js' %}"></script>
-
-    <!-- função para mandar pela url o tamanho da tela que está sendo exibida (width) para envio customizado do contexto -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            function loadContent() {
-                var width = window.innerWidth;
         
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "?width=" + width, true);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        document.getElementById("content-placeholder").innerHTML = xhr.responseText;
-                    }
-                };
-                xhr.send();
-            }
-        
-            window.addEventListener("resize", loadContent);
-            loadContent();  // Load content on page load
-        });
-        </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 import os
 
 # --------------------------> funções/classes auxiliares <-------------------------------------------
@@ -12,6 +13,10 @@ def path_ebook(instance, filename):
 
 def path_img_ebook(instance, filename):
     return os.path.join("img/ebook/"+instance.assunto, filename)
+
+def validar_pdf(value):
+    if not value.name.endswith('.pdf'):
+        raise ValidationError('O arquivo deve ser um PDF.')
 
 # ----------------------------> Modelos <------------------------------------------------------------
 
@@ -34,7 +39,7 @@ class Secao(models.Model):
         super(Secao, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f'seção {self.titulo}'
+        return f'seção {self.id-1} - {self.titulo}'
 
 class ConfigSite(models.Model):
     """
@@ -110,7 +115,7 @@ class Ebook(models.Model):
 
     titulo = models.CharField(max_length=200, blank=False, null=False)
     assunto = models.CharField(max_length=200, blank=False, null=False)
-    conteudo = models.FileField(upload_to=path_ebook, blank=False, null=False)
+    conteudo = models.FileField(upload_to=path_ebook, blank=False, null=False, validators=[validar_pdf])
     img_capa = models.ImageField(upload_to=path_img_ebook,blank=False, null=False)
 
     def __str__(self):
