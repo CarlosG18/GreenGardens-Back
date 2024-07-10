@@ -15,7 +15,14 @@ import os
 
 def get_context(name_session):
     """
-
+      Funcão generica para obter todas as  instancias do modelo ElementoImagem
+      
+      args:
+        - name_session: nome da seção ao qual se quer obter as instancias
+        
+      return:
+        - secao: instacia do modelo secao com o titulo = name_session
+        - imgs: todas as instancias do modelo ElementoImagem que estão relacionadas com a secao
     """
     secao = get_object_or_404(Secao, titulo=name_session)
     imgs = ElementoImagem.objects.filter(secao=secao)
@@ -23,7 +30,11 @@ def get_context(name_session):
 
 def get_context_latest(name_session, limit_number):
     """
-    
+      funcao para se obter um numero especifico das ultimas instancias do modelo ElementoImagem
+      
+      args:
+        - name_session: nome da seção ao qual se quer obter as instancias
+        - imgs: Ultimas (limit_number) instancias do modelo ElementoImagem
     """
     secao = get_object_or_404(Secao, titulo=name_session)
     imgs = ElementoImagem.objects.filter(secao=secao).order_by('-id')[:limit_number]
@@ -33,13 +44,11 @@ def get_context_latest(name_session, limit_number):
 
 def index(request):
     """
-        
+      view principal para tratamento dos dados dos formularios e obtenção dos contextos da landing page
     """
     # obtendo os nomes das seções
     all_secoes = Secao.objects.all()
     nomes_secoes = [name.titulo for name in all_secoes]
-
-    print(nomes_secoes)
 
     # configurações do site
     config_site = ConfigSite.objects.latest('id')
@@ -54,16 +63,16 @@ def index(request):
     # Seção 2 : Nossos serviços
     secao_nossos_servicos, imgs_nossos_servicos = get_context_latest(nomes_secoes[2],2)
 
-    # Seção Nossos serviços para o mobile
+    ## Seção 2 : Nossos serviços para o mobile
     _, imgs_nossos_servicos_mobile = get_context_latest(nomes_secoes[2],5)
 
-    # seção 3 : ebook 
+    # Seção 3 : ebook 
     try:
         secao_ebook = Secao.objects.get(titulo=nomes_secoes[3])
     except Secao.DoesNotExist:
         secao_ebook = None
 
-    # ebook principal - o que será visualizado na landing page
+    ## ebook principal - o que será visualizado na landing page
     try:
         ebook_principal = Ebook.objects.latest('id')
     except Ebook.DoesNotExist:
@@ -88,8 +97,8 @@ def index(request):
     # Seção 6 : galeria
     secao_galeria, img_galeria = get_context(nomes_secoes[6])
 
+    # tratamento dos formularios - contato e ebook
     if request.method == "POST":
-
         # parte de tratamento do forms de contato e envio de email personalizado
         if 'contato_form' in request.POST:    
             form_ebook = EbookForm()
@@ -145,12 +154,3 @@ def index(request):
        'ebook_principal': ebook_principal,
        'form_ebook': form_ebook,
     })
-
-def dynamic_css_view(request):
-    style_config = ConfigSite.objects.first()
-    context = {
-        'cor_primaria': style_config.cor_primaria,
-        'cor_secundaria': style_config.cor_secundaria,
-    }
-    response = render(request, 'styles/dynamic_styles.css', context, content_type='text/css')
-    return HttpResponse(response)
