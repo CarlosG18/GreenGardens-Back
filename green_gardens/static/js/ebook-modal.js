@@ -49,37 +49,67 @@ export default function initEbookModal() {
     
         })
     }
+
+    function validateForm() {
+        return modalInputName.value.length > 3 && modalInputPhone.value.length > 8 && modalInputEmail.value.length > 7;
+    }
     
     const downloadFinished = document.getElementById('downloadFinished');
-    
-    const downloadBtn = document.getElementById('dowloadModalBtn');
-    downloadBtn.addEventListener('click', (event) => {
+
+    modalForms.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const verified = modalInputName.value.length  > 3 && modalInputPhone.value.length > 8 && modalInputEmail.value.length > 7;
-        
-        if(verified) {
-            modalForms.style.display = 'none';
-            downloadFinished.classList.add('active_animation')
-            
-            Toastify({ //Lib de alert 
-                text: "Sucesso!",
-                duration: 3000,
-                close: true,
-                gravity: "top", 
-                position: "right", 
-                stopOnFocus: false, 
-                style: {
-                  background: "white",
-                  color: "#242C12"
-                }
-            }).showToast();
+        const formData = new FormData(modalForms);
 
-            modalInputName.value = '';
-            modalInputPhone.value = ''; // Resetar os campos de input
-            modalInputEmail.value = '';
-    
-        }else {
+        try {
+            const response = await fetch(modalForms.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value,
+                }
+            });
+
+            // Verifique o status da resposta e se é um JSON válido
+            if (response.ok) {
+                const data = await response.json();
+                modalForms.style.display = 'none';
+                downloadFinished.classList.add('active_animation')
+
+                //closeModal(modalBox);
+                //downloadFinished.classList.add("active_animation");
+
+                Toastify({
+                    text: "Sucesso!",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: false,
+                    style: { background: "white", color: "#242C12" },
+                }).showToast();
+
+                modalInputName.value = "";
+                modalInputPhone.value = "";
+                modalInputEmail.value = "";
+
+                window.location.href = data.url_download;
+
+            } else {
+                Toastify({
+                    text: "Erro ao processar o formulário!",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: { background: "red" },
+                }).showToast();
+                console.error('Erro na requisição:', response.statusText);  // Mostra erros na requisição
+            }
+        } catch (error) {
+            console.error('Erro na operação fetch:', error);  // Mostra erros na operação fetch
             Toastify({ //Lib de alert 
                 text: "Preencha os campos corretamente!",
                 duration: 3000,
@@ -93,9 +123,7 @@ export default function initEbookModal() {
                 
               }).showToast();
         }
-    
-    })
-    
+        });
     
     // Fechar o a tela de dowload com sucesso
     
@@ -106,5 +134,3 @@ export default function initEbookModal() {
         closeModal(downloadFinished); // Fechar a tela de download
     })
 }
-
-
