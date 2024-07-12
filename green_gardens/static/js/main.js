@@ -7,8 +7,6 @@ import initServicosCarrossel from "./servicos-carrossel.js";
 import initContatoModal from "./contato-modal.js";
 import initShowMoreText from "./ebook-mobile.js";
 
-console.log("main.js")
-
 initSliderHome();
 initScrollSection();
 initAnimationScroll(); 
