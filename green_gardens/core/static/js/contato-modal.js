@@ -11,5 +11,7 @@ export default function initContatoModal() {
     const closeMessageBtn = document.getElementById('close_message_btn');
     closeMessageBtn.addEventListener('click', () => {
         modalContact.classList.remove('active_animation')
+        modalContact.style.display = "none"
     })
+
 }

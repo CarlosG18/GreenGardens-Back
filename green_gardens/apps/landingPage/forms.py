@@ -1,4 +1,5 @@
 from django import forms
+from .models import Usuario
 import re
 
 class ContatoForm(forms.Form):
@@ -77,50 +78,48 @@ class ContatoForm(forms.Form):
             else:
                 raise forms.ValidationError("formato de telefone invalido!")
             
-class EbookForm(forms.Form):
+class UsuarioForm(forms.ModelForm):
     """
-        classe para tratamento do formulário de validação para o download do ebook
+        classe para tratamento do formulário de validação para o download do ebook e criação de usuario
     """
+    class Meta:
+        model = Usuario
+        fields = "__all__"
 
-    nome_ebook = forms.CharField(
-        max_length=100,
-        label="Nome",
-        required=True,
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': "Seu nome",
-                'name': "nome",
-            }
-        ),
-    )
+        labels = {
+            "nome_user": "Nome",
+            "email_user": "Email",
+            "telefone_user": "Telefone",
+        }
 
-    telefone_ebook = forms.CharField(
-        max_length=19,
-        label="Telefone",
-        required=True,
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': "(xx) xxxxx-xxxx",
-                'name': "telefone",
-            }
-        ),
-    )
-
-    email_ebook = forms.EmailField(
-        label="Email",
-        required=True,
-        widget=forms.EmailInput(
-            attrs={
-                'placeholder': "nome@email.com",
-                'name': "email",
-            }
-        ),
-    )
+        widgets = {
+            "nome_user": forms.TextInput(
+                attrs={
+                    'placeholder': "Seu nome",
+                    'name': "nome",
+                    'id': 'modalName',
+                }
+            ),
+            "email_user": forms.EmailInput(
+                attrs={
+                    'placeholder': "nome@email.com",
+                    'name': "email",
+                    'id': 'modalEmail',
+                }
+            ),
+            "telefone_user": forms.TextInput(
+                attrs={
+                    'placeholder': "(xx) xxxxx-xxxx",
+                    'name': "telefone",
+                    'id': 'modalTelefone',
+                }
+            ),
+        }
 
     # função para validar o formato do email, permitindo apenas emails válidos
-    def clean_email_ebook(self):
+    def clean_email_user(self):
         email_regex = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" 
-        email = self.cleaned_data.get('email_ebook')
+        email = self.cleaned_data.get('email_user')
 
         if email:
             if re.match(email_regex, email):
@@ -129,10 +128,10 @@ class EbookForm(forms.Form):
                 raise forms.ValidationError("formato de email invalido!")
             
     # função para validar o formato de telefone, definido como validos os padrões referentes ao brasil
-    def clean_telefone_ebook(self):
+    def clean_telefone_user(self):
         tel_regex = r"\(\d{2}\) 9?\d{4}-\d{4}"
 
-        tel = self.cleaned_data.get('telefone_ebook')
+        tel = self.cleaned_data.get('telefone_user')
 
         if tel:
             if re.match(tel_regex, tel):

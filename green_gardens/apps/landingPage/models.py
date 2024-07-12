@@ -6,40 +6,40 @@ import os
 # --------------------------> funções/classes auxiliares <-------------------------------------------
 
 def dinamic_path(instance, filename):
-  """
-    funcao para gerar um caminho personalizado para o upload da imagem de acordo com a secao
-  """
+    """
+        funcao para gerar um caminho personalizado para o upload da imagem de acordo com a secao
+    """
     return os.path.join("img/"+instance.secao.path, filename)
 
 def path_ebook(instance, filename):
-  """
-    funcao para gerar um caminho personalizado para o upload do ebook de acordo com o conteudo
-  """
+    """
+        funcao para gerar um caminho personalizado para o upload do ebook de acordo com o conteudo
+    """
     return os.path.join("ebook/"+instance.assunto, filename)
 
 def path_img_ebook(instance, filename):
-  """
-    funcao para gerar um caminho personalizado para o upload da imagem da capa do ebook acordo com o assunto do ebook
-  """
+    """
+        funcao para gerar um caminho personalizado para o upload da imagem da capa do ebook acordo com o assunto do ebook
+    """
     return os.path.join("img/ebook/"+instance.assunto, filename)
 
 def validar_pdf(value):
-  """
-    Funcao para verificar se o arquivo carregado é um pdf
-  """
+    """
+        Funcao para verificar se o arquivo carregado é um pdf
+    """
     if not value.name.endswith('.pdf'):
         raise ValidationError('O arquivo deve ser um PDF.')
 
 # ----------------------------> Modelos <------------------------------------------------------------
 
 class Secao(models.Model):
-  """
-    Modelo para dinamizar os titulos e conteudos das seções presentes na landing page
-  """
+    """
+        Modelo para dinamizar os titulos e conteudos das seções presentes na landing page
+    """
     class Meta:
         verbose_name = "seções"
         verbose_name_plural = "seções"
-    
+
     titulo = models.CharField(max_length=100, blank=True, null=True)
     path = models.CharField(max_length=200, blank=False, editable=False, null=False, validators=[
         RegexValidator(
@@ -135,3 +135,14 @@ class Ebook(models.Model):
 
     def __str__(self):
         return f'ebook - {self.titulo}'
+
+class Usuario(models.Model):
+    """
+        modelo para criacao de usuarios capturados pelo forms do ebook
+    """
+    nome_user = models.CharField(max_length=200, blank=False, null=False)
+    email_user = models.CharField(max_length=300,blank=False, null=False)
+    telefone_user = models.CharField(max_length=100,blank=False, null=False)
+
+    def __str__(self):
+        return self.nome_user

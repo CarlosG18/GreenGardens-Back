@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ElementoImagem, ConfigSite, Secao, Avaliacao, Ebook
+from .models import ElementoImagem, ConfigSite, Secao, Avaliacao, Ebook, Usuario
 from django.core.exceptions import ValidationError
 
 class SingletonModelAdmin(admin.ModelAdmin):
@@ -42,9 +42,11 @@ class SecaoConfig(admin.ModelAdmin):
         if Secao.objects.count() >= 7:
             return False
         return super().has_add_permission(request)
-
+    
 admin.site.register(Avaliacao)
 admin.site.register(Ebook)
+admin.site.register(Usuario)
+
 
 
 

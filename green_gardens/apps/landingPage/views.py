@@ -1,8 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import ElementoImagem, ConfigSite, Secao, Avaliacao, Ebook
-from django.http import HttpResponse
-from .forms import ContatoForm, EbookForm
-from django.contrib import messages
+from .forms import ContatoForm, UsuarioForm
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -10,6 +8,7 @@ from django.utils.html import strip_tags
 from django.urls import reverse
 from django.http import FileResponse
 import os
+from django.http import JsonResponse
 
 # --------------------------> inicio das funções/classes auxiliares <-------------------------------------------
 
@@ -47,61 +46,102 @@ def index(request):
       view principal para tratamento dos dados dos formularios e obtenção dos contextos da landing page
     """
     # obtendo os nomes das seções
-    all_secoes = Secao.objects.all()
-    nomes_secoes = [name.titulo for name in all_secoes]
+    try: 
+        all_secoes = Secao.objects.all()
+    except Secao.DoesNotExist:
+        all_secoes = None
+    
+    if all_secoes is not None:
+        nomes_secoes = [name.titulo for name in all_secoes]
+    else:
+        nomes_secoes = None
+
 
     # configurações do site
-    config_site = ConfigSite.objects.latest('id')
+    try:
+        config_site = ConfigSite.objects.latest('id')
+    except ConfigSite.DoesNotExist:
+        config_site = None
 
     # Seção 0 : banner pricipal
     ## obtendo as imagens do banner principal
-    _, imgs_banner_principal = get_context(nomes_secoes[0])[:5]
+    if nomes_secoes != []:
+        secao_banner_principal, imgs_banner_principal = get_context(nomes_secoes[0])[:5]
+    else:
+        secao_banner_principal, imgs_banner_principal = None, None
+    try:
+        pre_load_img_banner = ElementoImagem.objects.filter(secao=secao_banner_principal).first()
+    except ElementoImagem.DoesNotExist:
+        pre_load_img_banner = None
+
 
     # Seção 1 : sobre
-    secao_sobre = Secao.objects.get(titulo=nomes_secoes[1])
+    try:
+        secao_sobre, img_secao_sobre = get_context(nomes_secoes[1])
+        img_secao_sobre = img_secao_sobre.get()
+    except:
+        secao_sobre, img_secao_sobre = None, None
 
+    
     # Seção 2 : Nossos serviços
-    secao_nossos_servicos, imgs_nossos_servicos = get_context_latest(nomes_secoes[2],2)
+    try:
+        secao_nossos_servicos, imgs_nossos_servicos = get_context_latest(nomes_secoes[2],2)
+        ## Seção 2 : Nossos serviços para o mobile
+        _, imgs_nossos_servicos_mobile = get_context_latest(nomes_secoes[2],5)
+    except:
+        secao_nossos_servicos, imgs_nossos_servicos,imgs_nossos_servicos_mobile = None, None, None 
 
-    ## Seção 2 : Nossos serviços para o mobile
-    _, imgs_nossos_servicos_mobile = get_context_latest(nomes_secoes[2],5)
-
+    
     # Seção 3 : ebook 
-    try:
+    if nomes_secoes != []:
         secao_ebook = Secao.objects.get(titulo=nomes_secoes[3])
-    except Secao.DoesNotExist:
-        secao_ebook = None
+        ## ebook principal - o que será visualizado na landing page
+        try:
+            ebook_principal = Ebook.objects.latest('id')
+        except Ebook.DoesNotExist:
+            ebook_principal = None
+    else:
+        secao_ebook, ebook_principal = None, None
 
-    ## ebook principal - o que será visualizado na landing page
-    try:
-        ebook_principal = Ebook.objects.latest('id')
-    except Ebook.DoesNotExist:
-        ebook_principal = None
-
+    
     # Seção 4 : valores
-    secao_valores, imgs_valores = get_context(nomes_secoes[4])
+    if nomes_secoes != []:
+        secao_valores, imgs_valores = get_context(nomes_secoes[4])
+    else:
+        secao_valores, imgs_valores = None, None
 
+    
     # Seção 5 : avaliação
     ## Obtendo a ultima avaliacao
     try:
         last_avaliacao = Avaliacao.objects.latest('id')
     except Avaliacao.DoesNotExist:
         last_avaliacao = None
-    
-    secao_avaliacao = Secao.objects.filter(titulo=nomes_secoes[5])
+
+    if nomes_secoes != []:
+        secao_avaliacao = Secao.objects.filter(titulo=nomes_secoes[5]).get()
+    else:
+        secao_avaliacao = None
     if last_avaliacao is not None:
-        img_avaliacao = ElementoImagem.objects.filter(secao=secao_avaliacao).get()
+        img_avaliacao = ElementoImagem.objects.filter(secao=secao_avaliacao).last()
     else:
         img_avaliacao = None
 
-    # Seção 6 : galeria
-    secao_galeria, img_galeria = get_context(nomes_secoes[6])
 
+    # Seção 6 : galeria
+    if nomes_secoes != []:  
+        secao_galeria, img_galeria = get_context(nomes_secoes[6])
+    else:
+        secao_galeria, img_galeria = None, None
+
+    form_contato = ContatoForm()
+    form_ebook = UsuarioForm()
+
+    
     # tratamento dos formularios - contato e ebook
     if request.method == "POST":
         # parte de tratamento do forms de contato e envio de email personalizado
-        if 'contato_form' in request.POST:    
-            form_ebook = EbookForm()
+        if 'contato_form' in request.POST:
             form_contato = ContatoForm(request.POST)
             if form_contato.is_valid():
                 assunto = "Pedido de Contato"
@@ -118,27 +158,13 @@ def index(request):
                 email = EmailMultiAlternatives(assunto, text_content, email_from, destinatario)
                 email.attach_alternative(html_content, 'text/html')
                 email.send()
-                messages.success(request, "email enviado com sucesso!")
-            else:
-                messages.error(request, "erro no envio do email!")
-
-        # parte de tratamento do forms para download do ebook
-        if 'ebook_form' in request.POST:
-            form_contato = ContatoForm()
-            form_ebook = EbookForm(request.POST)
-            if form_ebook.is_valid():
-                file_path = os.path.join(settings.MEDIA_ROOT, ebook_principal.conteudo.name)
-                messages.success(request, "ebook baixado com sucesso!")
-                return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=ebook_principal.conteudo.name)
-            else:
-                messages.error(request, "erro no download!")
-    else:
-        form_contato = ContatoForm()
-        form_ebook = EbookForm()
+                return redirect('landingPage:index')
 
     return render(request, 'index.html', {
        'imgs_banner_principal': imgs_banner_principal,
+       'preload_img_banner': pre_load_img_banner,
        'sobre': secao_sobre,
+       'img_sobre': img_secao_sobre,
        'secao_nossos_servicos': secao_nossos_servicos,
        'imgs_nossos_servicos': imgs_nossos_servicos,
        'imgs_nossos_servicos_mobile': imgs_nossos_servicos_mobile,
@@ -154,3 +180,29 @@ def index(request):
        'ebook_principal': ebook_principal,
        'form_ebook': form_ebook,
     })
+
+def download_ebook(request):
+    """
+        View para realizar o download do ebook
+
+        return: retorna uma resposta que contem o arquivo do ebook
+    """
+    ebook_principal = Ebook.objects.latest('id')
+    file_path = os.path.join(settings.MEDIA_ROOT, ebook_principal.conteudo.name)
+    if request.method == 'POST':
+        
+        form_ebook = UsuarioForm(request.POST)
+        if form_ebook.is_valid():
+            form_ebook.save()
+            data = {
+                'sucess': True,
+                'url_download': reverse('landingPage:download-ebook'),
+            }
+            return JsonResponse(data)
+        else:
+            print("erro")
+
+    return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=ebook_principal.conteudo.name)
+
+
+    
