@@ -4,7 +4,7 @@
 
 **Tecnologias usadas**:
 
-![django](https://img.shields.io/badge/django-228B22?style=for-the-badge&logo=django)
+![django](https://img.shields.io/badge/django-5.0.6-228B22?style=for-the-badge&logo=django&labelColor=228B22)
 
 ## 🧩 Contextualização
 
@@ -21,12 +21,8 @@ O objetivo do desenvolvimento desse projeto visa cumprir os seguintes pontos:
 - ✔️ Envio de email personalizado e responsivo;
 - ✔️ Código limpo e organizado no github com a documentação do desenvolvimento.
 
-## 📝 Etapas de desenvolvimento:
-
-- [👨‍💻 Tópicos do Backend](./content/backend.md)
-
 ## 👤 Time de desenvolvimento
 
 - **🎨 UX/UI**:[@beatriz](https://br.linkedin.com/in/beatriz-xavier-339232287)
-- **👨‍💻 Front-end**:[@yanxxavier](https://github.com/yanxxavier)
+- **👨‍💻 Front-end**:[@yanxxavier](https://github.com/yanxxavier/GreenGardens-Front)
 - **👨‍💻 Back-end**: [Carlos Gabriel](https://www.linkedin.com/in/carlosg18/)
